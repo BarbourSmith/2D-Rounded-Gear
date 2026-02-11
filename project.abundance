@@ -1,106 +1,112 @@
 {
-    "atomType": "Molecule",
-    "name": "2D-Rounded-Gear",
-    "x": 0,
-    "y": 0,
-    "uniqueID": 1738615584571,
-    "ioValues": [
+  "atomType": "Molecule",
+  "x": 0,
+  "y": 0,
+  "uniqueID": 1738615584571,
+  "name": "2D-Rounded-Gear",
+  "ioValues": [
+    {
+      "name": "Teeth",
+      "ioValue": 10
+    },
+    {
+      "name": "Step",
+      "ioValue": 2
+    }
+  ],
+  "topLevel": true,
+  "allAtoms": [
+    {
+      "atomType": "Output",
+      "x": 0.98,
+      "y": 0.5,
+      "uniqueID": 1738615593581,
+      "ioValues": [
         {
-            "name": "Teeth",
-            "ioValue": 10
-        },
-        {
-            "name": "Step",
-            "ioValue": 2
+          "name": "number or geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
         }
-    ],
-    "description": "Molecules provide an organizational structure to contain atoms. Double click on a molecule to enter it. Use the up arrow in the upper right hand corner of the screen to go up one level.",
-    "topLevel": true,
-    "allAtoms": [
+      ]
+    },
+    {
+      "atomType": "Code",
+      "x": 0.5257936507936508,
+      "y": 0.3227665706051873,
+      "uniqueID": 1738615598349,
+      "ioValues": [
         {
-            "atomType": "Output",
-            "name": "Output",
-            "x": 0.98,
-            "y": 0.5,
-            "uniqueID": 1738615593581,
-            "ioValues": [
-                {
-                    "name": "number or geometry",
-                    "ioValue": 1738615598349
-                }
-            ],
-            "description": "Connect geometry here to make it available in the next level up. "
+          "name": "teeth",
+          "ioValue": 10
         },
         {
-            "atomType": "Code",
-            "name": "Code",
-            "x": 0.5178571428571428,
-            "y": 0.46239554317548753,
-            "uniqueID": 1738615598349,
-            "ioValues": [
-                {
-                    "name": "teeth",
-                    "ioValue": 10
-                },
-                {
-                    "name": "step",
-                    "ioValue": 10
-                },
-                {
-                    "name": "height",
-                    "ioValue": 10
-                }
-            ],
-            "description": "Defines a Replicad code block.",
-            "codeVersion": 1,
-            "code": " \n      //Inputs:[teeth, step, height]\n      //This defines the molecules inputs and creates variables with the same names which can be referenced in the code\n      \n      let angle = 360/(teeth*2); //The angle of each tooth is 1/2 of what would fit to make space for the teeth that come in\n      let radius = (step / 2) / Math.sin(angle / 2 * (Math.PI / 180)); //This is where the teeth circles are positioned\n      let apothem = (step / 2) / Math.tan(angle / 2 * (Math.PI / 180)); //This is the size of the circle that the teeth are subtracted from\n\n      console.log(\"The effective size of the gear is: \");\n      console.log(apothem);\n      console.log(\"The diameter of each tooth is: \");\n      console.log(step/2);\n      \n      //We can also create a new shape from scratch\n      let oneTooth = replicad.drawCircle(step/2)\n      //This is the plane we are going to put our new shape on\n      const newPlane = new replicad.Plane();\n      //And we extrude the shape to make it 3D\n      let createdShape = oneTooth.translate([radius, 0]);\n\n      let fusedShape = createdShape.clone();\n\n      for (let i = 1; i < teeth; i++) {\n        fusedShape = fusedShape.fuse(createdShape.clone().rotate(2*angle*i, [0, 0, 0], [0, 0, 1]))\n      } \n\n      let center = replicad.drawCircle(apothem)\n      //This is the plane we are going to put our new shape on\n      //const newPlane2 = new Plane();\n      //And we extrude the shape to make it 3D\n      //let createdShape2 = center.sketchOnPlane(newPlane2).extrude(height);\n      //center = center.cut(fusedShape.clone().rotate(angle+1, [0, 0, 0], [0, 0, 1]));\n\n      let fullGear = fusedShape.clone().fuse(center);\n\n      //Cut away the tooth in spots\n      for (let i = 0; i < teeth; i++) {\n        fullGear = fullGear.cut(createdShape.clone().rotate(2*angle*i + angle + .1, [0, 0, 0], [0, 0, 1])) //The 0.1 here is to account for a bug when the edges allign perfectly\n      } \n\n\n      //fullGear = fullGear.cut(fusedShape.rotate(angle, [0, 0, 0], [0, 0, 1]))\n      \n      //For our new geometry we need to define the tags, color, plane, etc\n      let shape2 = {\n          geometry: [fullGear], \n          tags: [\"aTag\"],\n          color: '#A3CE5B',\n          plane: newPlane,\n          bom: []\n      }\n      \n      return shape2\n      \n      \n          /**\n          To Use the Code Atom, enter your inputs to the input list a.e Inputs:[shape, height]\n          If your input is connected to another atom with a replicad geometry you can access its geometry by looking up its ID in your library. a.e library[Input1].geometry[0] \n          Use any replicad available methods to modify your geometry. Learn more about all of the available methods at \n          https://replicad.xyz/docs/introapp/UserGuide.html \n          Return a replicad object that includes geometry, color, tags and plane. \n      \n      \n          Example Code Atom:\n      \n            Inputs:[shape, x];\n      \n            let finalShape = library[shape].geometry[0].clone.translate[x,0,0]\n      \n            return {geometry: finalShape, color: library[shape].color, plane: library[shape].plane, tags: library[shape].tags }\n      \n            - See more examples at _______ \n      \n      \n          */\n      "
+          "name": "step",
+          "ioValue": 2
         },
         {
-            "atomType": "Input",
-            "name": "Teeth",
-            "x": 0.029699999999999997,
-            "y": 0.34540389972144847,
-            "uniqueID": 1738615694005,
-            "ioValues": [],
-            "description": "Adds an input to the parent molecule. If the parent molecule is the top level of the project then the input will be available when the project is shared or imported into another project. Name is editable",
-            "type": "number"
-        },
-        {
-            "atomType": "Input",
-            "name": "Step",
-            "x": 0.029699999999999997,
-            "y": 0.7827298050139275,
-            "uniqueID": 1738615715750,
-            "ioValues": [],
-            "description": "Adds an input to the parent molecule. If the parent molecule is the top level of the project then the input will be available when the project is shared or imported into another project. Name is editable",
-            "type": "number"
+          "name": "height",
+          "ioValue": 10
         }
-    ],
-    "allConnectors": [
+      ],
+      "codeVersion": 1,
+      "code": " \n      //Inputs:[teeth, step, height]\n      //This defines the molecules inputs and creates variables with the same names which can be referenced in the code\n      \n      let angle = 360/(teeth*2); //The angle of each tooth is 1/2 of what would fit to make space for the teeth that come in\n      let radius = (step / 2) / Math.sin(angle / 2 * (Math.PI / 180)); //This is where the teeth circles are positioned\n      let apothem = (step / 2) / Math.tan(angle / 2 * (Math.PI / 180)); //This is the size of the circle that the teeth are subtracted from\n\n      console.log(\"The effective size of the gear is: \");\n      console.log(apothem);\n      console.log(\"The diameter of each tooth is: \");\n      console.log(step/2);\n      \n      //We can also create a new shape from scratch\n      let oneTooth = replicad.drawCircle(step/2)\n      //This is the plane we are going to put our new shape on\n      const newPlane = new replicad.Plane();\n      //And we extrude the shape to make it 3D\n      let createdShape = oneTooth.translate([radius, 0]);\n\n      let fusedShape = createdShape.clone();\n\n      for (let i = 1; i < teeth; i++) {\n        fusedShape = fusedShape.fuse(createdShape.clone().rotate(2*angle*i, [0, 0, 0], [0, 0, 1]))\n      } \n\n      let center = replicad.drawCircle(apothem)\n      //This is the plane we are going to put our new shape on\n      //const newPlane2 = new Plane();\n      //And we extrude the shape to make it 3D\n      //let createdShape2 = center.sketchOnPlane(newPlane2).extrude(height);\n      //center = center.cut(fusedShape.clone().rotate(angle+1, [0, 0, 0], [0, 0, 1]));\n\n      let fullGear = fusedShape.clone().fuse(center);\n\n      //Cut away the tooth in spots\n      for (let i = 0; i < teeth; i++) {\n        fullGear = fullGear.cut(createdShape.clone().rotate(2*angle*i + angle + .1, [0, 0, 0], [0, 0, 1])) //The 0.1 here is to account for a bug when the edges allign perfectly\n      } \n\n\n      //fullGear = fullGear.cut(fusedShape.rotate(angle, [0, 0, 0], [0, 0, 1]))\n      \n      //For our new geometry we need to define the tags, color, plane, etc\n      let shape2 = {\n          geometry: [fullGear], \n          tags: [\"aTag\"],\n          color: '#A3CE5B',\n          plane: newPlane,\n          bom: []\n      }\n      \n      return shape2\n      \n      \n          /**\n          To Use the Code Atom, enter your inputs to the input list a.e Inputs:[shape, height]\n          If your input is connected to another atom with a replicad geometry you can access its geometry by looking up its ID in your library. a.e library[Input1].geometry[0] \n          Use any replicad available methods to modify your geometry. Learn more about all of the available methods at \n          https://replicad.xyz/docs/introapp/UserGuide.html \n          Return a replicad object that includes geometry, color, tags and plane. \n      \n      \n          Example Code Atom:\n      \n            Inputs:[shape, x];\n      \n            let finalShape = library[shape].geometry[0].clone.translate[x,0,0]\n      \n            return {geometry: finalShape, color: library[shape].color, plane: library[shape].plane, tags: library[shape].tags }\n      \n            - See more examples at _______ \n      \n      \n          */\n      "
+    },
+    {
+      "atomType": "Input",
+      "x": 0.025384615384615384,
+      "y": 0.15384615384615385,
+      "uniqueID": 1738615694005,
+      "name": "Teeth",
+      "type": "number"
+    },
+    {
+      "atomType": "Input",
+      "x": 0.025384615384615384,
+      "y": 0.24615384615384617,
+      "uniqueID": 1738615715750,
+      "name": "Step",
+      "type": "number"
+    },
+    {
+      "atomType": "Code",
+      "x": 0.3412698412698413,
+      "y": 0.7118155619596541,
+      "uniqueID": "id-12",
+      "ioValues": [
         {
-            "ap1Name": "geometry",
-            "ap2Name": "number or geometry",
-            "ap2Primary": false,
-            "ap1ID": 1738615598349,
-            "ap2ID": 1738615593581
+          "name": "height",
+          "ioValue": 10
         },
         {
-            "ap1Name": "number or geometry",
-            "ap2Name": "teeth",
-            "ap2Primary": false,
-            "ap1ID": 1738615694005,
-            "ap2ID": 1738615598349
+          "name": "teeth",
+          "ioValue": "__GEOMETRY_INPUT__"
         },
         {
-            "ap1Name": "number or geometry",
-            "ap2Name": "step",
-            "ap2Primary": false,
-            "ap1ID": 1738615715750,
-            "ap2ID": 1738615598349
+          "name": "step",
+          "ioValue": "__GEOMETRY_INPUT__"
         }
-    ],
-    "unitsKey": "MM",
-    "fileTypeVersion": 1,
-    "compiledBom": [],
-    "filetypeVersion": 1
+      ],
+      "codeVersion": 1,
+      "code": "//Inputs:[teeth, step, height]\n\n// 1. Setup Standard Gear Parameters\n// In traditional gears, \"step\" translates best to \"Module\" (the metric size unit of the tooth).\n// A Module of 2 is twice as big as a Module of 1.\nlet module = step; \n\n// The Pressure Angle determines how \"steep\" the teeth are. 20 degrees is the industrial standard.\nlet pressureAngle = 20; \n\nconsole.log(\"Generating Involute Gear with Module: \" + module);\nconsole.log(\"Pitch Diameter: \" + (module * teeth));\n\n// 2. Generate the 2D Profile\n// replicad.drawInvoluteGear creates the complex math for the curved teeth automatically.\nlet gearSketch = replicad.drawInvoluteGear({\n    module: module,\n    teeth: teeth,\n    pressureAngle: pressureAngle,\n    // Optional: Add a center hole radius if you need one, e.g., hole: 5\n    hole: 0 \n});\n\n// 3. Define the plane\nconst newPlane = new replicad.Plane();\n\n// 4. Extrude to 3D\n// We take the 2D sketch and pull it up by the 'height' input\nlet gearShape = gearSketch.sketchOnPlane(newPlane).extrude(height);\n\n// 5. Output Object\nlet shape2 = {\n    geometry: [gearShape], \n    tags: [\"StandardGear\"],\n    color: '#A3CE5B',\n    plane: newPlane,\n    bom: []\n}\n\nreturn shape2"
+    }
+  ],
+  "allConnectors": [
+    {
+      "ap2Name": "number or geometry",
+      "ap1ID": 1738615598349,
+      "ap2ID": 1738615593581
+    },
+    {
+      "ap2Name": "teeth",
+      "ap1ID": 1738615694005,
+      "ap2ID": 1738615598349
+    },
+    {
+      "ap2Name": "step",
+      "ap1ID": 1738615715750,
+      "ap2ID": 1738615598349
+    }
+  ],
+  "unitsKey": "MM",
+  "fileTypeVersion": 1,
+  "filetypeVersion": 1
 }
